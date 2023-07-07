@@ -14,7 +14,7 @@ export default function SignInPage() {
       const response = await axios.post(requisitions.postSignin, loginStates);
       //TODO: salvar o token em algum lugar (localhost ou passar p alguma função no routes)
     } catch (error) {
-      alert(error.message);
+      alert(error.response.data.message);
     }
   }
 

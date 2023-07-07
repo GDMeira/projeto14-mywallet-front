@@ -15,24 +15,27 @@ export default function SignUpPage() {
 
   const navigate = useNavigate();
 
-  async function handleChange(e) {
-    e.preventDeafult();
+  async function handleSubmit(e) {
+    e.preventDefault();
 
     if (formStates.password !== formStates.checkPassword) {
       return alert('Confirmação de senha está incorreta!')
     }
 
+    const newUser = {...formStates};
+    delete newUser.checkPassword;
+
     try {
-      await axios.post(requisitions.postSignup);
+      await axios.post(requisitions.postSignup, newUser);
       navigate(pages.signIn);
     } catch (error) {
-      alert(error.message)
+      alert(error.response.data.message);
     }
   }
 
   function handleChange(e) {
     const newFormStates = formStates;
-    newFormStates[e.target.id] = e.targe.value;
+    newFormStates[e.target.id] = e.target.value;
     setFormStates(newFormStates);
   }
 
