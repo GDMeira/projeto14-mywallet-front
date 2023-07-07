@@ -7,10 +7,10 @@ import axios from "axios"
 
 export default function SignUpPage() {
   const [formStates, setFormStates] = useState({
-    name: 0,
-    email: 0,
-    password: 0,
-    checkPassword: 0
+    name: '',
+    email: '',
+    password: '',
+    checkPassword: ''
   })
 
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function SignUpPage() {
   }
 
   function handleChange(e) {
-    const newFormStates = formStates;
+    const newFormStates = {...formStates};
     newFormStates[e.target.id] = e.target.value;
     setFormStates(newFormStates);
   }
@@ -47,6 +47,7 @@ export default function SignUpPage() {
           id="name"
           placeholder="Nome" 
           type="text" 
+          value={formStates.name}
           onChange={e => handleChange(e)}
         />
         <input
@@ -54,6 +55,7 @@ export default function SignUpPage() {
           placeholder="E-mail" 
           type="email"
           autoComplete="username"
+          value={formStates.email}
           onChange={e => handleChange(e)}
         />
         <input
@@ -61,6 +63,7 @@ export default function SignUpPage() {
           placeholder="Senha" 
           type="password" 
           autoComplete="new-password" 
+          value={formStates.password}
           onChange={e => handleChange(e)}
         />
         <input 
@@ -68,6 +71,7 @@ export default function SignUpPage() {
           placeholder="Confirme a senha" 
           type="password" 
           autoComplete="new-password" 
+          value={formStates.checkPassword}
           onChange={e => handleChange(e)}
         />
         <button type="submit">Cadastrar</button>
