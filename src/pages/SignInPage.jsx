@@ -5,8 +5,8 @@ import { pages, requisitions } from "../constants/routes"
 import { useState } from "react"
 import axios from "axios"
 
-export default function SignInPage() {
-  const [loginStates, setLoginStates] = useState({email: 'gabriel3@gmail.com', password: '1234'});
+export default function SignInPage({ setUserName }) {
+  const [loginStates, setLoginStates] = useState({email: '', password: ''});
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -14,8 +14,8 @@ export default function SignInPage() {
     
     try {
       const resp = await axios.post(requisitions.postSignin, loginStates);
-      //TODO: Receber informações de usuário no logIn
-      localStorage.setItem('token', resp.data);
+      localStorage.setItem('token', resp.data.token);
+      setUserName(resp.data.name);
       navigate(pages.home);
     } catch (error) {
       alert(error.response.data.message);

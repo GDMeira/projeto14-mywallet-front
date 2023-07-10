@@ -19,7 +19,6 @@ export default function TransactionsPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     const newTransac = {...formStates,value: formStates.value.replace(',', '.'), type: transacType};
-    console.log(newTransac);
     
     try {
       await axios.post(requisitions.postTransaction, newTransac, headers);

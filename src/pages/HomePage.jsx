@@ -1,15 +1,16 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { headers, pages, requisitions } from "../constants/routes";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 
-export default function HomePage() {
+export default function HomePage({ userName }) {
   const navigate = useNavigate();
   const [transacList, setTransacList] = useState(undefined);
+  const [name, setUserName] = useState(undefined);
 
   useEffect(() => {
     axios.get(requisitions.getTransactions, headers)
@@ -32,8 +33,11 @@ export default function HomePage() {
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
-        <BiExit />
+        <h1>Olá, {userName}</h1>
+        <BiExit onClick={() => {
+          localStorage.setItem('token', '');
+          navigate(pages.signIn)
+        }}/>
       </Header>
 
       {transacList !== undefined || <h1>Loading...</h1>}
