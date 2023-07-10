@@ -12,7 +12,8 @@ export const requisitions = {
     postSignin: API_URL + '/signin',
     postSignup: API_URL + '/signup',
     postTransaction: API_URL + '/transaction',
-    getTransactions: API_URL + '/transaction'
+    getTransactions: API_URL + '/transaction',
+    logout: API_URL + '/logout'
 }
 
 export const headers = {

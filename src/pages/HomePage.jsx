@@ -34,7 +34,13 @@ export default function HomePage({ userName }) {
     <HomeContainer>
       <Header>
         <h1>Olá, {userName}</h1>
-        <BiExit onClick={() => {
+        <BiExit onClick={async () => {
+          try {
+            await axios.delete(requisitions.logout, headers);
+          } catch (error) {
+            alert(error.response.data.message);
+          }
+          
           localStorage.setItem('token', '');
           navigate(pages.signIn)
         }}/>
