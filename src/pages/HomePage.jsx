@@ -13,6 +13,7 @@ export default function HomePage({ userName }) {
   const [name, setUserName] = useState(undefined);
 
   useEffect(() => {
+    console.log(headers);
     axios.get(requisitions.getTransactions, headers)
       .then(resp => setTransacList(resp.data))
       .catch(error => alert(error.response.data.message));
@@ -40,7 +41,7 @@ export default function HomePage({ userName }) {
           } catch (error) {
             alert(error.response.data.message);
           }
-          
+
           localStorage.setItem('token', '');
           navigate(pages.signIn)
         }}/>
