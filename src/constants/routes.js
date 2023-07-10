@@ -10,5 +10,13 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const requisitions = {
     postSignin: API_URL + '/signin',
-    postSignup: API_URL + '/signup'
+    postSignup: API_URL + '/signup',
+    postTransaction: API_URL + '/transaction',
+    getTransactions: API_URL + '/transaction'
+}
+
+export const headers = {
+    headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
 }

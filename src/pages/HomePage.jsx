@@ -1,8 +1,34 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { useNavigate } from "react-router-dom"
+import { headers, pages, requisitions } from "../constants/routes";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import dayjs from "dayjs";
 
 export default function HomePage() {
+  const navigate = useNavigate();
+  const [transacList, setTransacList] = useState(undefined);
+
+  useEffect(() => {
+    axios.get(requisitions.getTransactions, headers)
+      .then(resp => setTransacList(resp.data))
+      .catch(error => alert(error.response.data.message));
+  }, []);
+
+  function getBalance() {
+    let balance = 0;
+
+    transacList.forEach(transaction => {
+      balance += (transaction.type === 'entrada' ? transaction.value : -transaction.value);
+    });
+
+    const color = (balance > 0 ? 'positivo' : 'negativo');
+    const value = Math.abs(balance).toFixed(2).replace('.', ',');
+    return  <Value color={color}>{value}</Value>
+  }
+
   return (
     <HomeContainer>
       <Header>
@@ -10,38 +36,35 @@ export default function HomePage() {
         <BiExit />
       </Header>
 
+      {transacList !== undefined || <h1>Loading...</h1>}
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          {transacList && transacList.map(transaction => {
+            return (<ListItemContainer key={transaction._id.toString()}>
+              <div>
+                <span>{dayjs(transaction.date).format('DD/MM')}</span>
+                <strong>{transaction.description}</strong>
+              </div>
+              <Value color={(transaction.type === 'entrada' ? 'positivo' : 'negativo')}>
+                {transaction.value.toFixed(2).replace('.', ',')}
+              </Value>
+            </ListItemContainer>)
+          })}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          {transacList && getBalance()}
         </article>
       </TransactionsContainer>
 
 
       <ButtonsContainer>
-        <button>
+        <button onClick={() => navigate(pages.inbound)}>
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button>
+        <button onClick={() => navigate(pages.outbound)}>
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>

@@ -14,6 +14,7 @@ export default function SignInPage() {
     
     try {
       const resp = await axios.post(requisitions.postSignin, loginStates);
+      //TODO: Receber informações de usuário no logIn
       localStorage.setItem('token', resp.data);
       navigate(pages.home);
     } catch (error) {
