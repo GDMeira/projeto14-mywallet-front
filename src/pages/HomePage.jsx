@@ -32,24 +32,26 @@ export default function HomePage( ) {
 
     const color = (balance > 0 ? 'positivo' : 'negativo');
     const value = Math.abs(balance).toFixed(2).replace('.', ',');
-    return  <Value color={color}>{value}</Value>
+    return  <Value color={color} data-test="total-amount">{value}</Value>
   }
 
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, {user.name}</h1>
+        <h1 data-test="user-name">Olá, {user.name}</h1>
         <BiExit onClick={async () => {
-          try {
-            await axios.delete(requisitions.logout, headersAuth(user.token));
-          } catch (error) {
-            alert(error.response.data.message);
-          }
+            try {
+              await axios.delete(requisitions.logout, headersAuth(user.token));
+            } catch (error) {
+              alert(error.response.data.message);
+            }
 
-          localStorage.removeItem('token');
-          setUser(0);
-          navigate(pages.signIn)
-        }}/>
+            localStorage.removeItem('token');
+            setUser(0);
+            navigate(pages.signIn)
+          }}
+          data-test="logout"
+        />
       </Header>
 
       {transacList !== undefined || <h1>Loading...</h1>}
@@ -59,9 +61,12 @@ export default function HomePage( ) {
             return (<ListItemContainer key={transaction._id.toString()}>
               <div>
                 <span>{dayjs(transaction.date).format('DD/MM')}</span>
-                <strong>{transaction.description}</strong>
+                <strong data-test="registry-name">{transaction.description}</strong>
               </div>
-              <Value color={(transaction.type === 'entrada' ? 'positivo' : 'negativo')}>
+              <Value 
+                color={(transaction.type === 'entrada' ? 'positivo' : 'negativo')}
+                data-test="registry-amount"
+              >
                 {transaction.value.toFixed(2).replace('.', ',')}
               </Value>
             </ListItemContainer>)
@@ -76,11 +81,11 @@ export default function HomePage( ) {
 
 
       <ButtonsContainer>
-        <button onClick={() => navigate(pages.inbound)}>
+        <button onClick={() => navigate(pages.inbound)} data-test="new-income">
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button onClick={() => navigate(pages.outbound)}>
+        <button onClick={() => navigate(pages.outbound)} data-test="new-expense">
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>
@@ -141,7 +146,7 @@ const ButtonsContainer = styled.section`
     }
   }
 `
-const Value = styled.div`
+const Value = styled.div.attrs(props => ({'data-test': props['data-test']}))`
   font-size: 16px;
   text-align: right;
   color: ${(props) => (props.color === "positivo" ? "green" : "red")};

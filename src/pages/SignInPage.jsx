@@ -41,6 +41,7 @@ export default function SignInPage() {
           autoComplete="username" 
           value = {loginStates.email}
           onChange={e => handleChange(e)}
+          data-test="email"
         />
         <input 
           id="password"
@@ -49,8 +50,9 @@ export default function SignInPage() {
           autoComplete="password" 
           value = {loginStates.password}
           onChange={e => handleChange(e)}
+          data-test="password"
         />
-        <button type="submit">Entrar</button>
+        <button type="submit" data-test="sign-in-submit">Entrar</button>
       </form>
 
       <Link to={pages.signUp}>

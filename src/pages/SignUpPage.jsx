@@ -46,6 +46,7 @@ export default function SignUpPage() {
           type="text" 
           value={formStates.name}
           onChange={e => handleChange(e)}
+          data-test="name"
         />
         <input
           id="email"
@@ -54,6 +55,7 @@ export default function SignUpPage() {
           autoComplete="username"
           value={formStates.email}
           onChange={e => handleChange(e)}
+          data-test="email"
         />
         <input
           id="password"
@@ -62,6 +64,7 @@ export default function SignUpPage() {
           autoComplete="new-password" 
           value={formStates.password}
           onChange={e => handleChange(e)}
+          data-test="password"
         />
         <input 
           id="checkPassword"
@@ -70,8 +73,9 @@ export default function SignUpPage() {
           autoComplete="new-password" 
           value={formStates.checkPassword}
           onChange={e => handleChange(e)}
+          data-test="conf-password"
         />
-        <button type="submit">Cadastrar</button>
+        <button type="submit" data-test="sign-up-submit">Cadastrar</button>
       </form>
 
       <Link to={pages.signIn}>

@@ -41,6 +41,7 @@ export default function TransactionsPage() {
           type="text"
           value={formStates.value}
           onChange={e => handleChange(e)}
+          data-test="registry-amount-input"
         />
         <input 
           id="description"
@@ -48,8 +49,9 @@ export default function TransactionsPage() {
           type="text" 
           value={formStates.description}
           onChange={e => handleChange(e)}
+          data-test="registry-name-input"
         />
-        <button>Salvar {transacType}</button>
+        <button data-test="registry-save">Salvar {transacType}</button>
       </form>
     </TransactionsContainer>
   )
