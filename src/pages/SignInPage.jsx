@@ -11,15 +11,14 @@ export default function SignInPage({ setUserName }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    
-    try {
-      const resp = await axios.post(requisitions.postSignin, loginStates);
-      localStorage.setItem('token', resp.data.token);
-      setUserName(resp.data.name);
-      navigate(pages.home);
-    } catch (error) {
-      alert(error.response.data.message);
-    }
+
+    axios.post(requisitions.postSignin, loginStates)
+      .then(resp => {
+        localStorage.setItem('token', resp.data.token);
+        setUserName(resp.data.name);
+        navigate(pages.home);
+      })
+      .catch(error => alert(error.response.data.message));
   }
 
   function handleChange(e) {

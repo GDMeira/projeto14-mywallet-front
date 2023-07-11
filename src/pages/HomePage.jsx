@@ -1,8 +1,8 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
-import { useLocation, useNavigate } from "react-router-dom"
-import { headers, pages, requisitions } from "../constants/routes";
+import { useNavigate } from "react-router-dom"
+import { headersAuth, pages, requisitions } from "../constants/routes";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -10,11 +10,9 @@ import dayjs from "dayjs";
 export default function HomePage({ userName }) {
   const navigate = useNavigate();
   const [transacList, setTransacList] = useState(undefined);
-  const [name, setUserName] = useState(undefined);
 
   useEffect(() => {
-    console.log(headers);
-    axios.get(requisitions.getTransactions, headers)
+    axios.get(requisitions.getTransactions, headersAuth)
       .then(resp => setTransacList(resp.data))
       .catch(error => alert(error.response.data.message));
   }, []);
@@ -37,12 +35,12 @@ export default function HomePage({ userName }) {
         <h1>Olá, {userName}</h1>
         <BiExit onClick={async () => {
           try {
-            await axios.delete(requisitions.logout, headers);
+            await axios.delete(requisitions.logout, headersAuth);
           } catch (error) {
             alert(error.response.data.message);
           }
 
-          localStorage.setItem('token', '');
+          localStorage.removeItem('token');
           navigate(pages.signIn)
         }}/>
       </Header>

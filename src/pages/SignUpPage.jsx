@@ -25,12 +25,9 @@ export default function SignUpPage() {
     const newUser = {...formStates};
     delete newUser.checkPassword;
 
-    try {
-      await axios.post(requisitions.postSignup, newUser);
-      navigate(pages.signIn);
-    } catch (error) {
-      alert(error.response.data.message);
-    }
+    axios.post(requisitions.postSignup, newUser)
+      .then(() => navigate(pages.signIn))
+      .catch(error => alert(error.response.data.message))
   }
 
   function handleChange(e) {

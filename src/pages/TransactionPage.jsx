@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
-import { headers, pages, requisitions } from "../constants/routes";
+import { headersAuth, pages, requisitions } from "../constants/routes";
 import axios from "axios";
 
 export default function TransactionsPage() {
@@ -20,12 +20,9 @@ export default function TransactionsPage() {
     e.preventDefault();
     const newTransac = {...formStates,value: formStates.value.replace(',', '.'), type: transacType};
     
-    try {
-      await axios.post(requisitions.postTransaction, newTransac, headers);
-      navigate(pages.home);
-    } catch (error) {
-      alert(error.response.data.message);
-    }
+    axios.post(requisitions.postTransaction, newTransac, headersAuth)
+      .then(() => navigate(pages.home))
+      .catch(() => alert(error.response.data.message))
   }
 
   return (
