@@ -3,20 +3,26 @@ import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useNavigate } from "react-router-dom"
 import { headersAuth, pages, requisitions } from "../constants/routes";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
+import { UserContext } from "../constants/UserContext";
 
-export default function HomePage({ userName }) {
+export default function HomePage( ) {
+  const {user, setUser} = useContext(UserContext);
   const navigate = useNavigate();
   const [transacList, setTransacList] = useState(undefined);
 
   useEffect(() => {
-    axios.get(requisitions.getTransactions, headersAuth)
-      .then(resp => setTransacList(resp.data))
-      .catch(error => alert(error.response.data.message));
-  }, []);
-
+    if (!user && localStorage.user) {
+      setUser({...JSON.parse(localStorage.user)});
+    } else {
+      axios.get(requisitions.getTransactions, headersAuth(user.token))
+        .then(resp => setTransacList(resp.data))
+        .catch(error => alert(error.response.data.message));
+    }
+  }, [user]);
+  
   function getBalance() {
     let balance = 0;
 
@@ -32,15 +38,16 @@ export default function HomePage({ userName }) {
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, {userName}</h1>
+        <h1>Olá, {user.name}</h1>
         <BiExit onClick={async () => {
           try {
-            await axios.delete(requisitions.logout, headersAuth);
+            await axios.delete(requisitions.logout, headersAuth(user.token));
           } catch (error) {
             alert(error.response.data.message);
           }
 
           localStorage.removeItem('token');
+          setUser(0);
           navigate(pages.signIn)
         }}/>
       </Header>

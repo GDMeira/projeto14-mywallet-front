@@ -16,8 +16,10 @@ export const requisitions = {
     logout: API_URL + '/logout'
 }
 
-export const headersAuth = {
-    headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
+export function headersAuth(token) {
+    if (!token) token = localStorage.getItem('token');
+
+    return {headers: {
+        'Authorization': `Bearer ${token}`
+    }}
 }

@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import { headersAuth, pages, requisitions } from "../constants/routes";
 import axios from "axios";
+import { UserContext } from "../constants/UserContext";
 
 export default function TransactionsPage() {
+  const {user, setUser} = useContext(UserContext);
   const params = useParams();
   const navigate = useNavigate();
   const transacType = params.tipo;
   const [formStates, setFormStates] = useState({value: '', description: ''})
+
+  useEffect(() => {
+    if (!user && localStorage.user) setUser({...JSON.parse(localStorage.user)});
+  }, [user]);
 
   function handleChange(e) {
     const newFormStates = {...formStates};
@@ -20,7 +26,7 @@ export default function TransactionsPage() {
     e.preventDefault();
     const newTransac = {...formStates,value: formStates.value.replace(',', '.'), type: transacType};
     
-    axios.post(requisitions.postTransaction, newTransac, headersAuth)
+    axios.post(requisitions.postTransaction, newTransac, headersAuth(user.token))
       .then(() => navigate(pages.home))
       .catch(() => alert(error.response.data.message))
   }
