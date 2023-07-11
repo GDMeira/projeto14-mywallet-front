@@ -19,7 +19,10 @@ export default function HomePage( ) {
     } else {
       axios.get(requisitions.getTransactions, headersAuth(user.token))
         .then(resp => setTransacList(resp.data))
-        .catch(error => alert(error.response.data.message));
+        .catch(error => {
+          navigate(pages.signIn);
+          alert(error.response.data.message);
+        });
     }
   }, [user]);
   
